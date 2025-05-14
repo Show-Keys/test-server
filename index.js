@@ -297,6 +297,19 @@ app.put('/products/:id', async (req, res) => {
   }
 });
 
+// Delete Product by ID
+app.delete('/products/:id', async (req, res) => {
+  try {
+    const deleted = await ProductModel.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+    res.json({ success: true, message: "Product deleted" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Error deleting product: " + err.message });
+  }
+});
+
 // ====================================
 // BID ROUTES
 // ====================================
