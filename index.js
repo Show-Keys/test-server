@@ -3,8 +3,6 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 import UserModel from './Models/UserModel.js';
 import ProductModel from './Models/ProductModel.js';
@@ -387,22 +385,6 @@ app.get('/dashboard/stats', async (req, res) => {
       error: err.message
     });
   }
-});
-
-// ====================================
-// STATIC FILES AND REACT APP
-// ====================================
-
-// Get __dirname in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'build')));
-
-// Catch-all handler: for any request that doesn't match an API route, send back React's index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 // ====================================
