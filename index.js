@@ -228,6 +228,87 @@ app.get('/getProductDetails/:id', async (req, res) => {
   }
 });
 
+// Get Product by ID (for edit page)
+app.get('/products/:id', async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.id);
+    if (!product) return res.status(404).json({ success: false, message: "Product not found" });
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Error fetching product: " + err.message });
+  }
+});
+
+// Update Product by ID
+app.put('/products/:id', async (req, res) => {
+  try {
+    const { name, description, startingPrice, imageUrl, latitude, longitude, endTime } = req.body;
+
+    // Validate fields as in addProduct
+    if (!name || !description || !startingPrice || !imageUrl || !latitude || !longitude || !endTime) {
+      return res.status(400).json({
+        success: false,
+        message: 'All fields are required: name, description, startingPrice, imageUrl, latitude, longitude, and endTime'
+      });
+    }
+    if (isNaN(startingPrice) || isNaN(latitude) || isNaN(longitude)) {
+      return res.status(400).json({
+        success: false,
+        message: 'startingPrice, latitude, and longitude must be valid numbers'
+      });
+    }
+    const endDate = new Date(endTime);
+    if (isNaN(endDate.getTime())) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid end time format'
+      });
+    }
+    if (latitude < -90 || latitude > 90) {
+      return res.status(400).json({
+        success: false,
+        message: 'Latitude must be between -90 and 90 degrees'
+      });
+    }
+    if (longitude < -180 || longitude > 180) {
+      return res.status(400).json({
+        success: false,
+        message: 'Longitude must be between -180 and 180 degrees'
+      });
+    }
+
+    const updated = await ProductModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        name,
+        description,
+        startingPrice,
+        imageUrl,
+        latitude,
+        longitude,
+        endTime: endDate
+      },
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ success: false, message: "Product not found" });
+    res.json({ success: true, message: "Product updated successfully", product: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Error updating product: " + err.message });
+  }
+});
+
+// Delete Product by ID
+app.delete('/products/:id', async (req, res) => {
+  try {
+    const deleted = await ProductModel.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+    res.json({ success: true, message: "Product deleted" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Error deleting product: " + err.message });
+  }
+});
 
 // ====================================
 // BID ROUTES
