@@ -11,7 +11,7 @@ import BidModel from './Models/BidModel.js';
 dotenv.config();
 
 const app = express();
-const PORT = 3002;
+const PORT = process.env.PORT;
 
 // Middleware
 app.use(cors({ origin: true, credentials: true }));
@@ -19,7 +19,7 @@ app.use(express.json());
 
 // MongoDB Connection
 mongoose
-  .connect('mongodb+srv://admin:1234@cluster0.p9f90.mongodb.net/ActionDB?retryWrites=true&w=majority')
+  .connect(`${process.env.MONGODB_URI}`)
   .then(() => console.log('✅ MongoDB connected'))
   .catch((err) => console.error('❌ MongoDB connection error:', err));
 
