@@ -8,6 +8,70 @@ import UserModel from './Models/UserModel.js';
 import ProductModel from './Models/ProductModel.js';
 import BidModel from './Models/BidModel.js';
 
+// --- DEMO DATA SEEDING ---
+async function seedDemoProducts() {
+  const now = new Date();
+  const products = [
+    {
+      name: 'bmw',
+      description: 'sadfasf',
+      startingPrice: 11,
+      imageUrl: 'https://www.bmw-special-sales.com/content/dam/bmw/marketBMWCOM/bmw-special-sales/BMW-5-Series-Sedan.png',
+      latitude: 23.6191744,
+      longitude: 58.5629696,
+      endTime: new Date('2025-12-31T22:33:00.000Z'),
+      createdAt: new Date('2025-12-31T18:33:35.455Z'),
+    },
+    {
+      name: 'Vintage Clock',
+      description: 'A beautiful old clock.',
+      startingPrice: 100,
+      imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+      latitude: 40.7128,
+      longitude: -74.0060,
+      endTime: new Date(now.getTime() + 24 * 60 * 60 * 1000),
+    },
+    {
+      name: 'Antique Vase',
+      description: 'Rare porcelain vase.',
+      startingPrice: 200,
+      imageUrl: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308',
+      latitude: 34.0522,
+      longitude: -118.2437,
+      endTime: new Date(now.getTime() + 48 * 60 * 60 * 1000),
+    },
+    {
+      name: 'Painting',
+      description: 'Original oil painting.',
+      startingPrice: 300,
+      imageUrl: 'https://images.unsplash.com/photo-1464983953574-0892a716854b',
+      latitude: 51.5074,
+      longitude: -0.1278,
+      endTime: new Date(now.getTime() + 72 * 60 * 60 * 1000),
+    },
+    {
+      name: 'Classic Car',
+      description: 'Restored 1960s convertible.',
+      startingPrice: 5000,
+      imageUrl: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d',
+      latitude: 37.7749,
+      longitude: -122.4194,
+      endTime: new Date(now.getTime() + 96 * 60 * 60 * 1000),
+    }
+  ];
+  try {
+    const count = await ProductModel.countDocuments();
+    if (count === 0) {
+      await ProductModel.insertMany(products);
+      console.log('✅ Demo products seeded');
+    } else {
+      console.log('ℹ️ Products collection not empty, skipping demo seed');
+    }
+  } catch (err) {
+    console.error('❌ Error seeding demo products:', err);
+  }
+}
+
 dotenv.config();
 
 const app = express();
@@ -20,7 +84,10 @@ app.use(express.json());
 // MongoDB Connection
 mongoose
   .connect(`${process.env.MONGODB_URI}`)
-  .then(() => console.log('✅ MongoDB connected'))
+  .then(async () => {
+    console.log('✅ MongoDB connected');
+    await seedDemoProducts();
+  })
   .catch((err) => console.error('❌ MongoDB connection error:', err));
 
 // ====================================
