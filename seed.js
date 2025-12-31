@@ -18,6 +18,16 @@ const users = [
 const now = new Date();
 const products = [
   {
+    name: 'bmw',
+    description: 'sadfasf',
+    startingPrice: 11,
+    imageUrl: 'https://www.bmw-special-sales.com/content/dam/bmw/marketBMWCOM/bmw-special-sales/BMW-5-Series-Sedan.png',
+    latitude: 23.6191744,
+    longitude: 58.5629696,
+    endTime: new Date('2025-12-31T22:33:00.000Z'),
+    createdAt: new Date('2025-12-31T18:33:35.455Z'),
+  },
+  {
     name: 'Vintage Clock',
     description: 'A beautiful old clock.',
     startingPrice: 100,
