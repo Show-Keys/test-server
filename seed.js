@@ -43,6 +43,15 @@ const products = [
     latitude: 51.5074,
     longitude: -0.1278,
     endTime: new Date(now.getTime() + 72 * 60 * 60 * 1000), // 72 hours from now
+  },
+  {
+    name: 'Classic Car',
+    description: 'Restored 1960s convertible.',
+    startingPrice: 5000,
+    imageUrl: 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d',
+    latitude: 37.7749,
+    longitude: -122.4194,
+    endTime: new Date(now.getTime() + 96 * 60 * 60 * 1000), // 96 hours from now
   }
 ];
 
@@ -58,7 +67,6 @@ async function seed() {
     console.log('Users seeded:', createdUsers.map(u => u.email));
 
     // Assign owner to products
-    // Optionally, if you want to associate products with users, add a user reference field to ProductModel and set it here.
     const createdProducts = await ProductModel.insertMany(products);
     console.log('Products seeded:', createdProducts.map(p => p.name));
 
